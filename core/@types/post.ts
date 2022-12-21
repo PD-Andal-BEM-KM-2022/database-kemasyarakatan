@@ -11,7 +11,7 @@ export type post = {
     keywords: [string];
     categories: [string];
   };
-  comment: [comment];
+  comments: [comment];
 };
 
 export type contact = {

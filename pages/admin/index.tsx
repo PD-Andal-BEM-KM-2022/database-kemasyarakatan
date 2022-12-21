@@ -31,9 +31,7 @@ export default function Admin(props: any) {
 
 export async function getServerSideProps(context: any) {
   const session = await getSession(context);
-  console.log('session', session);
   if (!session) {
-    console.log('session', session);
     return {
       redirect: {
         destination: "/auth/login",

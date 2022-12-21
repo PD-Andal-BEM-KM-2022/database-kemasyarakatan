@@ -16,7 +16,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     post.img = post.img[0];
     delete post._id;
     delete post.tags;
-    delete post.comment;
   });
 
   if (!posts) return res.status(404).json({ message: "Posts is empty" });
