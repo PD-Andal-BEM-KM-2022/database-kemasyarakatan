@@ -42,7 +42,7 @@ export default NextAuth({
     }),
   ],
   jwt: {
-    secret: process.env.SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     maxAge: 7 * 24 * 60 * 60,
     async encode(params: {
       secret: string;
