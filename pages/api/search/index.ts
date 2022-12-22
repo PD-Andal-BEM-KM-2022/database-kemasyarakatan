@@ -24,9 +24,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const result = items.filter(item => {
     const title = item.title.toLowerCase();
-    const content = item.content.toLowerCase();
-    const keywordString = item.keyword.join(" ").toLowerCase() || "";
-    const categoryString = item.category.join(" ").toLowerCase() || "";
+    const content = item.content.toLowerCase().split();
+    const keywordString = item.keyword.join(" ") || "";
+    const categoryString = item.category.join(" ") || "";
     const queryLowerCase = query.toLowerCase();
 
     return (
@@ -45,11 +45,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }));
 
   if (queryResult.length === 0)
-    return res.status(200).json({ message: "Posts (recommendation) is empty" });
+    return res.status(200).json({ message: "recommendation not found", status: true });
 
   res.status(200).json({
     result: queryResult,
-    message: "Posts (recommendation) is found",
+    message: "recommendation is found",
   });
   res.end();
 };

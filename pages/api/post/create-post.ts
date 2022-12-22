@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@core/lib/mongodb";
-import { post } from "@core/@types/post";
+import { postReq, post } from "@core/@types/post";
 import { getSession } from "next-auth/react";
 import {
   validate_email,
@@ -23,7 +23,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
     const db = client.db();
     const collection = db.collection("posts");
-    const { title, content, img, contact, categories, keywords } = req.body;
+    const { title, content, img, contact, categories, keywords } =
+      req.body as postReq;
+
+    // convert categories and keywords to lowercase
+    const categoriesArr = categories.map(category => category.toLowerCase());
+    const keywordsArr = keywords.map(keyword => keyword.toLowerCase());
 
     if (!title || !content) {
       res
@@ -80,8 +85,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         twitter: contact?.twitter || null,
       },
       tags: {
-        keywords: keywords || [],
-        categories: categories || [],
+        keywords: keywordsArr || [],
+        categories: categoriesArr || [],
       },
       views: 0,
       createdAt: new Date().toISOString(),
@@ -92,13 +97,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // insert if title not exists
     const postExists = await collection.findOne({ title: title });
     if (postExists) {
-      res.status(400).json({ success: false, message: "Post with title already exists" });
+      res
+        .status(400)
+        .json({ success: false, message: "Post with title already exists" });
     }
 
     const result = await collection.insertOne(post);
-    res.status(201).json({success: true, message: "Post created", id: result.insertedId });
+    res
+      .status(201)
+      .json({ success: true, message: "Post created", id: result.insertedId });
   } else {
-    res.status(401).json({ success: false, message: "Not authenticated, please log in" });
+    res
+      .status(401)
+      .json({ success: false, message: "Not authenticated, please log in" });
   }
 
   res.end();

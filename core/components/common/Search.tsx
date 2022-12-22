@@ -3,19 +3,9 @@ import { useState } from "react";
 export default function Search() {
   const [recommandations, setRecommandations] = useState([]);
   const [search, setSearch] = useState("");
-  const [cooldown, setCooldown] = useState(false);
-
-  const resetCooldown = () => {
-    setTimeout(() => {
-      setCooldown(false);
-    }, 1000);
-  };
-
+  
   const inputHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (cooldown) {
-      return resetCooldown();
-    }
-
+    
     if (e.target.value.length < 2) {
       return setRecommandations([]);
     }
@@ -23,7 +13,6 @@ export default function Search() {
     const result = await fetch(`/api/search?search=${e.target.value}`);
 
     if (result.ok) {
-      setCooldown(true);
       const data = await result.json();
       setRecommandations(data.result);
     } else {

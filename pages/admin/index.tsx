@@ -1,23 +1,16 @@
-import { signOut, useSession, getSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import {useRouter} from "next/router";
+import { getSession } from "next-auth/react";
 
 export default function Admin(props: any) {
-  const router = useRouter();
+  const { status } = useSession();
   const logoutHandler = async () => {
-    await signOut({ redirect: false, callbackUrl: '/auth/login' });
+    await signOut({ redirect: false, callbackUrl: "/auth/login" });
   };
 
-  const { data: session, status } = useSession();
-
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
-
-  if(status === "unauthenticated") {
-    router.push("/auth/login");
-  }
-  
 
   return (
     <div>

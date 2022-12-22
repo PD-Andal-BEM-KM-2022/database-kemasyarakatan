@@ -11,7 +11,7 @@ export const sortResult = (queryResult: queryResult, query: string) => {
       // check without case sensitive
       if (keywordArray?.includes(query)) count += 1;
       if (categoryArray?.includes(query)) count += 1.5;
-      if (titleArray?.includes(query)) count += 3;
+      if (titleArray?.includes(query)) count += 10;
     }
     return { ...result, weight: count };
   });
