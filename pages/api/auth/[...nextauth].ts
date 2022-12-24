@@ -1,8 +1,10 @@
-import NextAuth from "next-auth";
+import NextAuth, { Awaitable } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "@core/lib/mongodb";
-import bcrypt from "bcryptjs";
+import { compare } from "@core/lib/auth";
+import { JWT } from "next-auth/jwt";
+import jwt from "jsonwebtoken";
 
 const useSecureCookies = !!process.env.VERCEL_URL;
 
@@ -15,44 +17,55 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        try {
-          const client = await clientPromise;
-          const db = client.db();
-          const collection = db.collection("auth");
-          const user = await collection.findOne({
-            username: credentials.username,
-          });
+        const client = await clientPromise;
+        const db = client.db();
+        const user = await db
+          .collection("auth")
+          .findOne({ username: credentials.username });
 
-          if (!user) {
-            throw new Error("No user found");
-          }
+        if (!user) {
+          throw new Error("No user found");
+        }
 
-          const isValid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
+        const isValid = await compare(credentials.password, user.password);
 
-          if (!isValid) {
-            throw new Error("Invalid password");
-          }
+        if (!isValid) {
+          throw new Error("Invalid password");
+        }
 
-          return user;
-        } catch (error) {}
+        const cred = {
+          name: user.username as string,
+        } as Awaitable<typeof user>;
+
+        return cred;
       },
     }),
   ],
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+    maxAge: 7 * 24 * 60 * 60,
+    async encode(params: {
+      secret: string;
+      token: JWT;
+      maxAge: number;
+    }): Promise<string> {
+      return jwt.sign(params.token, params.secret);
+    },
+    async decode(params: { secret: string; token: string }): Promise<JWT> {
+      return jwt.verify(params.token, params.secret) as JWT;
+    },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60,
+  },
   callbacks: {
-    async jwt({ account, token }) {
-      if (account) {
-        token = account;
-      }
+    async jwt({ token }) {
       return token;
     },
-    async session({ session, token }) {
-      session.user = token;
+    async session({ session}) {
       return session;
-    }
-    
+    },
   },
   pages: {
     signIn: "/auth/login",
@@ -66,7 +79,7 @@ export default NextAuth({
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        domain: process.env.VERCEL_URL || "localhost",
+        domain: process.env.VERCEL_URL || "admin.localhost",
         secure: useSecureCookies,
       },
     },

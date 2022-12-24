@@ -4,7 +4,7 @@ import { MONGODB_URI } from "./constant";
 const uri = MONGODB_URI;
 const options = {};
 
-let client;
+let client: MongoClient;
 let clientPromise: Promise<any>;
 
 declare global {

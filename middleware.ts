@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-
-export const config = {
+import { NextRequest, NextResponse } from "next/server";export const config = {
   matcher: [
     /*
      * Match all paths except for:

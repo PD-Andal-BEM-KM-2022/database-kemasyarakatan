@@ -11,6 +11,7 @@
     "flowbite": "^1.5.5",
     "flowbite-react": "^0.3.7",
     "gray-matter": "^4.0.3",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.12.1",
     "next": "latest",
     "next-auth": "^4.18.6",
@@ -19,7 +20,12 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@types/node": "18.11.17",
+=======
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/node": "^18.11.17",
+>>>>>>> 2017c3327ad942d60cea66fcab699c043f329e1e
     "@types/react": "18.0.26",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
