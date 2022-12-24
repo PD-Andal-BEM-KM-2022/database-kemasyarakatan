@@ -8,6 +8,8 @@
     "@next-auth/mongodb-adapter": "^1.1.1",
     "@reduxjs/toolkit": "^1.9.1",
     "bcryptjs": "^2.4.3",
+    "flowbite": "^1.5.5",
+    "flowbite-react": "^0.3.7",
     "gray-matter": "^4.0.3",
     "mongodb": "^4.12.1",
     "next": "latest",
@@ -17,7 +19,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^18.11.17",
+    "@types/node": "18.11.17",
     "@types/react": "18.0.26",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
