@@ -2,6 +2,9 @@
 /**
  * @type {import('@types/tailwindcss/tailwind-config').TailwindConfig}
  */
+
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   content: [
     "./node_modules/flowbite-react/**/*.js",
@@ -11,5 +14,12 @@ module.exports = {
   plugins: [
     require("flowbite/plugin")
   ],
-  theme: {},
+  theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      'white': '#ffffff',
+      'grey' : '#9D9D9D',
+    },
+  },
 }
