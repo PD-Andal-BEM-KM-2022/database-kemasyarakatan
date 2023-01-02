@@ -1,7 +1,6 @@
 import Footer from '@components/footer'
 import Navbar from '@components/navbar'
 import Tabmenu from '@components/tabmenu'
-import React from 'react'
 
 export default function index() {
   return (
