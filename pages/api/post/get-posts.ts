@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@core/lib/mongodb";
 
+let posts: any;
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const client = await clientPromise;
   const db = client.db();
@@ -12,7 +14,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     (await collection.countDocuments()) / Number(limit)
   );
 
-  let posts;
   if (category) {
     posts = await collection
       .find({
