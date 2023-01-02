@@ -3,17 +3,23 @@ import Card from "./card";
 import { useState, useEffect } from "react";
 
 export default function Tabmenu() {
-	const [posts, setPosts] = useState([]);
+	const [data, setdata] = useState(null);
+	const [isLoading, setLoading] = useState(false);
 
 	useEffect(() => {
+		setLoading(true);
 		fetch("/api/post/get-posts")
 			.then((res) => res.json())
 			.then((data) => {
-				setPosts(data);
+				setdata(data);
+				setLoading(false);
 			});
 	}, []);
 
-	console.log(posts);
+	console.log(data);
+
+	if (isLoading) return <p>Loading...</p>;
+	if (!data) return <p>No profile data</p>;
 
 	return (
 		<div className="mx-auto w-[90%]">

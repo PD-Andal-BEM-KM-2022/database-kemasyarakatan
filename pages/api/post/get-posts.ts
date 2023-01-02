@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@core/lib/mongodb";
 
+let posts: any;
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const client = await clientPromise;
 	const db = client.db();
@@ -12,11 +14,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		(await collection.countDocuments()) / Number(limit)
 	);
 
-	const posts = await collection
-		.find({
-			category: { $regex: category, $options: "i" },
-		})
-		.toArray();
+	if (category) {
+		posts = await collection
+			.find({
+				"tags.categories": category,
+			})
+			.sort({ _id: -1 })
+			.toArray();
+	} else {
+		posts = await collection.find({}).sort({ _id: -1 }).toArray();
+	}
 
 	posts.forEach((post) => {
 		post.id = post._id;

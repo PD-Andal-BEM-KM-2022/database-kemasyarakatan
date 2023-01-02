@@ -3,6 +3,6 @@ module.exports = {
 	output: "standalone",
 	// dummy images
 	images: {
-		domains: ["dummyimage.com"],
+		domains: ["i.ibb.co"],
 	},
 };

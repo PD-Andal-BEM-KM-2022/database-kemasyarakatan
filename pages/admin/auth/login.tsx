@@ -29,7 +29,7 @@ export default function SignIn({ csrfToken }) {
 	return (
 		<form
 			onSubmit={loginHandler}
-			className="flex flex-col justify-center  h-screen px-8 items-center"
+			className="flex flex-col justify-center  h-screen px-8 items-center bg-gray-700"
 		>
 			<div className="bg-gray-300 px-8 py-6 rounded-xl font-bold lg:text-xl">
 				<input name="csrfToken" type="hidden" defaultValue={csrfToken} />
