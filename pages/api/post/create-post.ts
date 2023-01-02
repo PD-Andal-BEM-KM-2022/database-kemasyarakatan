@@ -31,45 +31,61 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const keywordsArr = keywords.map(keyword => keyword.toLowerCase());
 
     if (!title || !content) {
-      res
+      return res
         .status(400)
         .json({ success: "error", message: "Title and content are required" });
     }
 
     if (!validate_email(contact?.email)) {
-      res
-        .status(400)
-        .json({ success: "error", message: "Invalid contact email." });
+      return res.status(400).json({
+        success: "error",
+        message: "Invalid contact email.",
+        example: "BEMKM@gmail.com",
+      });
     }
 
     if (!validate_facebook(contact?.facebook)) {
-      res
+      return res
         .status(400)
-        .json({ success: "error", message: "Invalid contact facebook." });
+        .json({
+          success: "error",
+          message: "Invalid contact facebook.",
+          example:
+            "https://www.facebook.com/username or https://facebook.com/username",
+        });
     }
 
     if (!validate_instagram(contact?.instagram)) {
-      res
-        .status(400)
-        .json({ success: "error", message: "Invalid contact instagram." });
+      return res.status(400).json({
+        success: "error",
+        message: "Invalid contact instagram.",
+        example:
+          "https://www.instagram.com/username or https://instagram.com/username",
+      });
     }
 
     if (!validate_twitter(contact?.twitter)) {
-      res
-        .status(400)
-        .json({ success: "error", message: "Invalid contact twitter." });
+      return res.status(400).json({
+        success: "error",
+        message: "Invalid contact twitter.",
+        example: "https://twitter.com/username",
+      });
     }
 
     if (!validate_phone(contact?.phone)) {
-      res
-        .status(400)
-        .json({ success: "error", message: "Invalid contact phone." });
+      return res.status(400).json({
+        success: "error",
+        message: "Invalid contact phone.",
+        example: "081234567890",
+      });
     }
 
     if (!validate_line(contact?.line)) {
-      res
-        .status(400)
-        .json({ success: "error", message: "Invalid contact line." });
+      return res.status(400).json({
+        success: "error",
+        message: "Invalid contact line.",
+        example: "https://line.me/ti/p/username",
+      });
     }
 
     const post = {
@@ -84,8 +100,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         instagram: contact?.instagram || null,
         twitter: contact?.twitter || null,
       },
-      tags: {
-        keywords: keywordsArr || [],
+      metadata: {
+        tags: keywordsArr || [],
         categories: categoriesArr || [],
       },
       views: 0,
