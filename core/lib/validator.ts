@@ -8,14 +8,15 @@ export const validate_email = (email: string) => {
 export const validate_instagram = (instagram: string) => {
   if (!instagram) return true;
 
-  const re = /https:\/\/www.instagram.com\/[a-zA-Z0-9_.]+/;
+  // validate instagram link with or without www, with or without https
+  const re = /https:\/\/(www.)?instagram.com\/[a-zA-Z0-9_.]+/;
   return re.test(instagram);
 };
 
 export const validate_facebook = (facebook: string) => {
   if (!facebook) return true;
 
-  const re = /https:\/\/www.facebook.com\/[a-zA-Z0-9_.]+/;
+  const re = /https:\/\/(www.)?facebook.com\/[a-zA-Z0-9_.]+/;
   return re.test(facebook);
 };
 
