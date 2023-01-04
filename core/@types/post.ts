@@ -11,7 +11,7 @@ export type post = {
     keywords: [string];
     categories: [string];
   };
-  comment: [comment];
+  comments: [commentType];
 };
 
 export type contact = {
@@ -25,7 +25,7 @@ export type contact = {
 };
 
 
-export type comment = {
+export type commentType = {
   _id: string;
   comment: string;
   createdAt: string;

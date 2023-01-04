@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@core/lib/mongodb";
-import { post } from "@core/@types/post";
+import { postReq, post } from "@core/@types/post";
 import { getSession } from "next-auth/react";
 import {
   validate_email,
@@ -17,38 +17,59 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (session) {
     if (req.method !== "POST") {
-      res.status(405).json({ message: "Method not allowed (POST ONLY)" });
+      res
+        .status(405)
+        .json({ success: "error", message: "Method not allowed (POST ONLY)" });
     }
     const db = client.db();
     const collection = db.collection("posts");
-    const { title, content, img, contact, categories, keywords } = req.body;
+    const { title, content, img, contact, categories, keywords } =
+      req.body as postReq;
+
+    // convert categories and keywords to lowercase
+    const categoriesArr = categories.map(category => category.toLowerCase());
+    const keywordsArr = keywords.map(keyword => keyword.toLowerCase());
 
     if (!title || !content) {
-      res.status(400).json({ message: "Title and content are required" });
+      res
+        .status(400)
+        .json({ success: "error", message: "Title and content are required" });
     }
 
     if (!validate_email(contact?.email)) {
-      res.status(400).json({ message: "Invalid contact email." });
+      res
+        .status(400)
+        .json({ success: "error", message: "Invalid contact email." });
     }
 
     if (!validate_facebook(contact?.facebook)) {
-      res.status(400).json({ message: "Invalid contact facebook." });
+      res
+        .status(400)
+        .json({ success: "error", message: "Invalid contact facebook." });
     }
 
     if (!validate_instagram(contact?.instagram)) {
-      res.status(400).json({ message: "Invalid contact instagram." });
+      res
+        .status(400)
+        .json({ success: "error", message: "Invalid contact instagram." });
     }
 
     if (!validate_twitter(contact?.twitter)) {
-      res.status(400).json({ message: "Invalid contact twitter." });
+      res
+        .status(400)
+        .json({ success: "error", message: "Invalid contact twitter." });
     }
 
     if (!validate_phone(contact?.phone)) {
-      res.status(400).json({ message: "Invalid contact phone." });
+      res
+        .status(400)
+        .json({ success: "error", message: "Invalid contact phone." });
     }
 
     if (!validate_line(contact?.line)) {
-      res.status(400).json({ message: "Invalid contact line." });
+      res
+        .status(400)
+        .json({ success: "error", message: "Invalid contact line." });
     }
 
     const post = {
@@ -64,26 +85,31 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         twitter: contact?.twitter || null,
       },
       tags: {
-        keywords: keywords || [],
-        categories: categories || [],
+        keywords: keywordsArr || [],
+        categories: categoriesArr || [],
       },
       views: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      comment: [{}],
+      comments: [{}],
     } as post;
 
     // insert if title not exists
     const postExists = await collection.findOne({ title: title });
     if (postExists) {
-        res.status(400).json({ message: "Post with title already exists" });
+      res
+        .status(400)
+        .json({ success: false, message: "Post with title already exists" });
     }
 
     const result = await collection.insertOne(post);
-    console.log(result);
-    res.status(201).json({ message: "Post created", id: result.insertedId });
+    res
+      .status(201)
+      .json({ success: true, message: "Post created", id: result.insertedId });
   } else {
-    res.status(401).json({ message: "Not authenticated" });
+    res
+      .status(401)
+      .json({ success: false, message: "Not authenticated, please log in" });
   }
 
   res.end();

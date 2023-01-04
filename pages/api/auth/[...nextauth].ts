@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 const useSecureCookies = !!process.env.VERCEL_URL;
 
 export default NextAuth({
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -63,7 +64,7 @@ export default NextAuth({
     async jwt({ token }) {
       return token;
     },
-    async session({ session}) {
+    async session({ session }) {
       return session;
     },
   },

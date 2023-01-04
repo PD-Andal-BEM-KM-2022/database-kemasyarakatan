@@ -11,3 +11,5 @@ export const compare = async (str: string, hash: string) => {
   return isValid;
 };
 
+
+
