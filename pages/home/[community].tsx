@@ -1,26 +1,28 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 export default function Community() {
 	// Data fetching
 	// const router = useRouter();
 	// const { community } = router.query;
 
-	// Dummy data after fetch
-	const data = {
-		title: "Community Title",
-		views: 26,
-		contact: {
-			name: "John Doe",
-			email: "john@doe.com",
-			phone: "08123456789",
-		},
-		tags: ["tag1", "tag2", "tag3", "tag4", "tag5"],
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum facilis cupiditate quod temporibus aspernatur beatae quae repellendus veniam adipisci, nam incidunt facere vel sapiente? Iusto dolorem magni suscipit consequatur laudantium eos, neque corrupti nesciunt aut in doloremque sit a quod?",
-		image: "https://dummyimage.com/600x400/000/fff",
-	};
+	const [data, setData] = useState(null);
+	const [isLoading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setLoading(true);
+		fetch("/api/post/get-post?id=63b2880d3f25858c5bc2452a")
+			.then((res) => res.json())
+			.then((data) => {
+				setData(data);
+				setLoading(false);
+				console.log(data);
+			});
+	}, []);
+
+	if (isLoading) return <p>Loading...</p>;
+	if (!data) return <p>No profile data</p>;
 
 	return (
 		<div className="px-12 py-10 lg:my-24 lg:mx-36">
@@ -45,7 +47,7 @@ export default function Community() {
 				{/* Image */}
 				<div className="w-full h-full lg:min-h-[1/2] bg-yellow-300 lg:object-contain lg:w-1/3 lg:h-1/3 mt-2">
 					<Image
-						src={data.image}
+						src={data.img[0]}
 						width={200}
 						height={200}
 						alt={data.title}
@@ -128,7 +130,7 @@ export default function Community() {
 
 					{/* Tags */}
 					<div className="flex flex-wrap gap-3 lg:gap-5 mt-6 lg:mt-8">
-						{data.tags.map((tag) => (
+						{data.metadata.tags.map((tag) => (
 							<div className="bg-gray-300 px-4 py-1 rounded-xl font-bold uppercase lg:px-5 lg:py-2">
 								<p className="text-sm lg:text-lg">{tag}</p>
 							</div>

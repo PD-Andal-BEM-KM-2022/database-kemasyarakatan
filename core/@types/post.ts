@@ -7,8 +7,8 @@ export type post = {
   views: number;
   createdAt: string;
   updatedAt: string;
-  tags: {
-    keywords: [string];
+  metadata: {
+    tags: [string];
     categories: [string];
   };
   comments: [commentType];
