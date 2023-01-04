@@ -26,4 +26,15 @@ if (process.env.NODE_ENV === "development") {
   clientPromise = client.connect();
 }
 
+export function closeConnection() {
+  client.close();
+}
+
+export async function getCollection(names: string[]) {
+  // return multiple collections
+  const client = await clientPromise;
+  const db = client.db();
+  return names.map(name => db.collection(name));
+}
+
 export default clientPromise;

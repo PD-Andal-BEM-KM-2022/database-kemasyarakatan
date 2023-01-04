@@ -1,16 +1,14 @@
-import clientPromise from "@core/lib/mongodb";
+import { protectMethod, protectRoute } from "@core/lib/api/middleware";
+import { getCollection } from "@core/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.body || req.query.id;
-  const client = await clientPromise;
-  const db = client.db();
-  const collection = db.collection("posts");
+  protectRoute(req, res);
+  protectMethod(req, res, "POST");
+  const [collection] = await getCollection(["posts"]);
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed (POST ONLY)" });
-  }
+  const { id } = req.body || req.query.id;
 
   const post = await collection.findOne({ _id: new ObjectId(id) });
 

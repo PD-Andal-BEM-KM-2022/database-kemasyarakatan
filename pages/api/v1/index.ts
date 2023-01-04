@@ -6,6 +6,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json({
     authenticated: !!session,
     message:
-      "Welcome to Database Kemasyarakatan REST API",
+      "Welcome to Database Kemasyarakatan REST API V1",
   });
 };
