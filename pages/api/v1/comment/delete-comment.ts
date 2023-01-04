@@ -1,20 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@core/lib/mongodb";
 import { ObjectId } from "mongodb";
-import { getSession } from "next-auth/react";
+import { protectMethod, protectRoute } from "@core/lib/api/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession({ req });
-
-  if (!session) {
-    res.status(401).json({ status: false, message: "Not authenticated" });
-    return;
-  }
-
-  if (req.method !== "POST") {
-    res.status(400).json({ status: false, message: "Method not allowed" });
-    return;
-  }
+  protectRoute(req, res);
+  protectMethod(req, res, "POST");
 
   const { commentId, postId } = req.body;
 

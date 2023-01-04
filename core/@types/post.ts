@@ -1,16 +1,18 @@
+import { ObjectId } from "mongodb";
+
 export type post = {
-  _id: string;
   title: string;
-  content: string;
+  content: string[];
   img: [string];
   contact: contact;
   views: number;
   createdAt: string;
   updatedAt: string;
   metadata: {
-    tags: [string];
-    categories: [string];
+    tags: string[];
   };
+  location: string;
+  category: string;
   comments: [commentType];
 };
 
@@ -23,7 +25,6 @@ export type contact = {
   twitter: string;
   line: string;
 };
-
 
 export type commentType = {
   _id: string;
@@ -44,8 +45,9 @@ export type postReq = {
     twitter: string;
     line: string;
   };
-  keywords: [string];
-  categories: [string];
+  location: string;
+  keywords: string[];
+  category: string;
 };
 
 export type postDeleteReq = {
@@ -67,9 +69,15 @@ export type postUpdateReq = {
     line: string;
   };
   keywords: [string];
-  categories: [string];
+  category: [string];
 };
 
 export type postUpdateViewsReq = {
   id: string;
+};
+
+export type categoryType = {
+  _id: string;
+  name: string;
+  countObject: number;
 };

@@ -3,11 +3,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function Community() {
-	// Data fetching
-	// const router = useRouter();
-	// const { community } = router.query;
-
-	// Dummy data after fetch
 	const data = {
 		title: "Community Title",
 		views: 26,

@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "@core/lib/mongodb";
+import { getCollection } from "@core/lib/mongodb";
 
 let posts: any;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const client = await clientPromise;
-  const db = client.db();
-  const collection = db.collection("posts");
+  const [collection] = await getCollection(["posts"]);
   const limit = req.query.limit || 10;
   const category = req.query.category || "";
   const page = (Number(req.query.page) - 1) * Number(limit) || 0;
@@ -15,12 +13,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   );
 
   if (category) {
-    posts = await collection
-      .find({
-        "tags.categories": category,
-      })
-      .sort({ _id: -1 })
-      .toArray();
+    // get posts by category (array)
+    posts = await collection.find({ category: { $in: category } }).toArray();
   } else {
     posts = await collection.find({}).sort({ _id: -1 }).toArray();
   }
