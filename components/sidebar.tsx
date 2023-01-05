@@ -1,5 +1,5 @@
 import { HiUserCircle } from "react-icons/hi";
-import { RiPencilFill } from "react-icons/ri";
+import { RiPencilFill, RiLogoutBoxFill } from "react-icons/ri";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
@@ -18,6 +18,7 @@ export default function Sidebar() {
 					<h3>Post</h3>
 				</div>
 				<div className="flex mt-10 text-center font-semibold bg-gray-200 rounded-lg px-2 py-1 gap-3 w-3/4">
+					<RiLogoutBoxFill className="w-5 h-5" />
 					<Link href="/auth/login" onClick={logoutHandler}>
 						Logout
 					</Link>

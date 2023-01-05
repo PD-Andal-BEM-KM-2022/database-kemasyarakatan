@@ -2,11 +2,49 @@ import { getSession, useSession } from "next-auth/react";
 import Sidebar from "@components/sidebar";
 import AdminCard from "@components/admincard";
 import { GrAdd } from "react-icons/gr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Admin(props: any) {
 	const [isOpen, setIsOpen] = useState("hidden");
+	const [data, setData] = useState(null);
 	const { status } = useSession();
+
+	useEffect(() => {
+		fetch("/api/post/get-posts")
+			.then((res) => res.json())
+			.then((data) => {
+				setData(data);
+				console.log(data);
+			});
+	}, []);
+
+	const splitDate = (date: string) => {
+		const split = date.split("T");
+		return split[0];
+	};
+
+	const addPost = async (e: any) => {
+		e.preventDefault();
+		// console.log(e.target.title.value);
+
+		// TODO: Adjust this to work with the new API
+		// const res = await fetch("/api/post/create-post", {
+		//   method: "POST",
+		//   body: JSON.stringify({
+		//     title: e.target.title.value,
+		//     content: e.target.content.value,
+		//     img: e.target.img.value,
+		//     community: e.target.community.value,
+		//   }),
+		//   headers: {
+		//     "Content-Type": "application/json",
+		//   },
+		// });
+		// const result = await res.json();
+		// console.log(result);
+
+		setIsOpen("hidden");
+	};
 
 	if (status === "loading") {
 		return <p>Loading...</p>;
@@ -25,69 +63,23 @@ export default function Admin(props: any) {
 							onClick={() => {
 								setIsOpen("block");
 							}}
-							className="rounded-lg bg-gray-300 inline-flex items-center px-3 py-2 text-center transition-all hover:shadow-[1px_1px_1px_grey] gap-4"
+							className="rounded-lg bg-gray-300 inline-flex items-center px-3 py-2 text-center transition-all hover:shadow-[1px_1px_1px_grey] gap-4 cursor-pointer"
 						>
 							<GrAdd />
 							Create Post
 						</div>
 					</div>
-					<div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-auto gap-x-8 gap-y-8">
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas A"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Kemahasiswaan"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas B"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Advokasi"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas C"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Ditmawa"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas D"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Eksekutif"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas E"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Kemahasiswaan"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas F"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Kemahasiswaan"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas G"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Kemahasiswaan"
-							Date="2022-01-17"
-						/>
-						<AdminCard
-							Image="https://source.unsplash.com/pgnUYPG3E_s"
-							Title="Komunitas H"
-							Desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-							Category="Kemahasiswaan"
-							Date="2022-01-17"
-						/>
+					<div className="w-full flex flex-wrap gap-10">
+						{data &&
+							data.posts.map((item: any) => (
+								<AdminCard
+									Image={item.img}
+									Title={item.title}
+									Desc={item.content[0]}
+									Category={item.category}
+									Date={splitDate(item.updatedAt)}
+								/>
+							))}
 					</div>
 				</div>
 			</div>
@@ -118,47 +110,54 @@ export default function Admin(props: any) {
 									>
 										Add Post
 									</h3>
-									<div className="mt-2">
-										<p className="text-sm text-gray-500">
-											<input
-												type="text"
-												className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-												placeholder="Judul Post"
-											/>
-										</p>
-									</div>
-									<div className="mt-2">
-										<p className="text-sm text-gray-500">
-											<input
-												type="text"
-												className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-												placeholder="Date"
-											/>
-										</p>
-									</div>
-									<div className="mt-2">
-										<p className="text-sm text-gray-500">
-											<input
-												type="text"
-												className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-												placeholder="Kategori"
-											/>
-										</p>
-									</div>
-									<div className="mt-2">
-										<p className="text-sm text-gray-500">
-											<textarea
-												className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-												placeholder="Deskripsi"
-											/>
-										</p>
-									</div>
+									<form id="addPost" onSubmit={addPost}>
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="title"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Judul Post"
+												/>
+											</p>
+										</div>
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="date"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Date"
+												/>
+											</p>
+										</div>
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="category"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Kategori"
+												/>
+											</p>
+										</div>
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<textarea
+													id="content"
+													className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Deskripsi"
+												/>
+											</p>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
 						<div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
 							<button
-								type="button"
+								type="submit"
+								form="addPost"
 								className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
 							>
 								Post
