@@ -1,25 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "@core/lib/mongodb";
-import { getSession } from "next-auth/react";
+import { getCollection } from "@core/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { protectMethod, protectRoute } from "@core/lib/api/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = getSession({ req });
+  protectRoute(req, res);
+  protectMethod(req, res, "PATCH");
+  const [collection] = await getCollection(["posts"]);
 
-  if (!session) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  if (req.method !== "PATCH") {
-    return res
-      .status(405)
-      .json({ message: "Method not allowed (PATCH ONLY)" });
-  }
-
-  const client = await clientPromise;
-  const db = client.db();
-  const collection = db.collection("posts");
-  const { title, content, contact, id } = req.body;
+  const { title, content, contact, id, location } = req.body;
 
   if (!id) {
     return res.status(400).json({ message: "ID is required" });
@@ -31,8 +20,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404).json({ message: `Post with id:${id} not found` });
   }
 
-  post.title = title;
-  post.content = content;
+  post.title = title || post.title;
+  post.content = content || post.content;
+  post.location = location || post.location;
+  post.updatedAt = new Date().toISOString();
   post.contact = {
     name: contact.name || post.contact.name || null,
     email: contact.email || post.contact.email || null,

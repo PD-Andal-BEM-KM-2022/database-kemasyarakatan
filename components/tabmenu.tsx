@@ -8,7 +8,7 @@ export default function Tabmenu() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch("/api/post/get-posts")
+		fetch("/api/v1/post/get-posts")
 			.then((res) => res.json())
 			.then((data) => {
 				setdata(data);

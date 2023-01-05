@@ -12,7 +12,7 @@ export default function Community() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch("/api/post/get-post?id=63b2880d3f25858c5bc2452a")
+		fetch("/api/v1/post/get-post?id=63b2880d3f25858c5bc2452a")
 			.then((res) => res.json())
 			.then((data) => {
 				setData(data);

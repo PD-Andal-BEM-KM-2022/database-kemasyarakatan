@@ -5,11 +5,13 @@ import { post } from "@core/@types/post";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const query = req.query.search as string;
-  if (!query) return res.status(400).json({ message: "Query is required" });
+  if (!query) return res.status(400).json({error: true, message: "Query is required" });
+  if (query.length < 3)
+    return res.status(400).json({ error: true, message: "Query is too short" });
 
   const [collection] = await getCollection(["posts"]);
 
-  const posts = (await collection.find({}).toArray()) as post[];
+  const posts = (await collection.find({}).toArray());
 
   try {
     const items = posts.map(post => {
