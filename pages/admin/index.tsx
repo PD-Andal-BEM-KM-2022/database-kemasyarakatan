@@ -9,6 +9,12 @@ export default function Admin(props: any) {
 	const [data, setData] = useState(null);
 	const { status } = useSession();
 
+	// Form data
+	const [title, setTitle] = useState("");
+	const [date, setDate] = useState("");
+	const [category, setCategory] = useState("");
+	const [content, setContent] = useState("");
+
 	useEffect(() => {
 		fetch("/api/post/get-posts")
 			.then((res) => res.json())
@@ -23,9 +29,17 @@ export default function Admin(props: any) {
 		return split[0];
 	};
 
-	const addPost = async (e: any) => {
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		// console.log(e.target.title.value);
+
+		// Form data
+		const data = {
+			title: title,
+			date: date,
+			category: category,
+			content: content,
+		};
+		console.log(data);
 
 		// TODO: Adjust this to work with the new API
 		// const res = await fetch("/api/post/create-post", {
@@ -44,6 +58,11 @@ export default function Admin(props: any) {
 		// console.log(result);
 
 		setIsOpen("hidden");
+		resetForm(e);
+	};
+
+	const resetForm = (e) => {
+		e.target.reset();
 	};
 
 	if (status === "loading") {
@@ -110,12 +129,15 @@ export default function Admin(props: any) {
 									>
 										Add Post
 									</h3>
-									<form id="addPost" onSubmit={addPost}>
+									<form id="addPost" onSubmit={handleSubmit}>
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<input
 													type="text"
 													id="title"
+													onChange={(e) => {
+														setTitle(e.target.value);
+													}}
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Judul Post"
 												/>
@@ -126,6 +148,9 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="date"
+													onChange={(e) => {
+														setDate(e.target.value);
+													}}
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Date"
 												/>
@@ -136,6 +161,9 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="category"
+													onChange={(e) => {
+														setCategory(e.target.value);
+													}}
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Kategori"
 												/>
@@ -145,6 +173,9 @@ export default function Admin(props: any) {
 											<p className="text-sm text-gray-500">
 												<textarea
 													id="content"
+													onChange={(e) => {
+														setContent(e.target.value);
+													}}
 													className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Deskripsi"
 												/>
