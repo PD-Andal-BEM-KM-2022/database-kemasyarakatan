@@ -51,12 +51,33 @@ export default function AdminCard(props) {
 
 	// Reset the form
 	const resetForm = (e) => {
-		e.target.reset();
-
 		setTitle("");
 		setDate("");
 		setCategory("");
 		setContent("");
+
+		e.target.reset();
+		window.location.reload();
+	};
+
+	// Delete post
+	const handleDelete = async (e) => {
+		e.preventDefault();
+		console.log(props.ID);
+
+		const res = await fetch("/api/v2/post", {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				postId: props.ID,
+			}),
+		});
+		const result = await res.json();
+		console.log(result);
+
+		window.location.reload();
 	};
 
 	return (
@@ -90,6 +111,7 @@ export default function AdminCard(props) {
 								<FaEdit color={isHoverA} />
 							</button>
 							<button
+								onClick={handleDelete}
 								className="mr-2"
 								onMouseEnter={() => {
 									setIsHoverB("red");

@@ -81,6 +81,7 @@ export default function Admin(props: any) {
 
 	const resetForm = (e) => {
 		e.target.reset();
+		window.location.reload();
 	};
 
 	if (status === "loading") {
@@ -115,6 +116,10 @@ export default function Admin(props: any) {
 									Desc={item.content[0]}
 									Category={item.category}
 									Date={splitDate(item.updatedAt)}
+									Keywords={item.keywords}
+									Location={item.location}
+									Contact={item.contact}
+									ID={item.id}
 								/>
 							))}
 					</div>
