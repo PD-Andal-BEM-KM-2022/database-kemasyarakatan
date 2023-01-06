@@ -1,10 +1,8 @@
 import { getCollection } from "@core/lib/mongodb";
-import getPost from "backend/controller/post/getPost";
-import getAllPost from "backend/controller/post/getAllPost";
 import { NextApiRequest, NextApiResponse } from "next";
 import privateRoute from "@backend/middleware/privateRoute";
-import createPost from "@backend/controller/post/createPost";
 import deletePost from "@backend/controller/post/deletePost";
+import {createPost, getAllPost, getPost, updatePost} from "@backend/controller/post";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const [postCollection, categoryCollection] = await getCollection([
@@ -26,8 +24,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return privateRoute(req, res, () => {
       return deletePost(req, res, postCollection, categoryCollection);
     });
+  } else if (req.method === "PATCH") {
+    return privateRoute(req, res, () => {
+      return updatePost(req, res, postCollection);
+    });
   } else {
     return res.status(400).json({ status: false, message: "Invalid request" });
   }
-
 };

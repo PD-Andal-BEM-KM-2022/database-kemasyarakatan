@@ -4,7 +4,7 @@ import { getCollection } from "@core/lib/mongodb";
 import { post } from "@core/@types/post";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const query = req.query.search as string;
+  const query = req.query.id as string;
   if (!query)
     return res.status(400).json({
       status: false,

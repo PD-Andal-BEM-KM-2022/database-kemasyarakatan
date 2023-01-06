@@ -12,6 +12,10 @@ export default async (
     return res.status(400).json({ message: "ID is required" });
   }
 
+  if (!title && !content && !contact && !location) {
+    return res.status(200).json({ message: "Nothing to update" });
+  }
+
   const post = await collection.findOne({ _id: new ObjectId(id) });
 
   if (!post) {
@@ -23,13 +27,13 @@ export default async (
   post.location = location || post.location;
   post.updatedAt = new Date().toISOString();
   post.contact = {
-    name: contact.name || post.contact.name || null,
-    email: contact.email || post.contact.email || null,
-    phone: contact.phone || post.contact.phone || null,
-    instagram: contact.instagram || post.contact.instagram || null,
-    facebook: contact.facebook || post.contact.facebook || null,
-    twitter: contact.twitter || post.contact.twitter || null,
-    line: contact.line || post.contact.line || null,
+    name: contact?.name || post?.contact?.name || null,
+    email: contact?.email || post?.contact?.email || null,
+    phone: contact?.phone || post?.contact?.phone || null,
+    instagram: contact?.instagram || post?.contact?.instagram || null,
+    facebook: contact?.facebook || post?.contact?.facebook || null,
+    twitter: contact?.twitter || post?.contact?.twitter || null,
+    line: contact?.line || post?.contact.line || null,
   };
 
   const result = await collection.updateOne(

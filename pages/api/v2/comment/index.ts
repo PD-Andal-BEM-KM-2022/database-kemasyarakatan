@@ -9,7 +9,10 @@ import {
 } from "@backend/controller/comment";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const [postCollection, commentCollection] = await getCollection(["posts", "comments"]);
+  const [postCollection, commentCollection] = await getCollection([
+    "posts",
+    "comments",
+  ]);
 
   if (req.method === "GET") {
     const postId = req.query.postId as string;
@@ -25,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (req.method === "POST") {
     createComment(req, res, commentCollection, postCollection);
   } else if (req.method === "DELETE") {
-    return deleteComment(req, res, commentCollection);
+    return deleteComment(req, res, commentCollection, postCollection);
   } else {
     return res.status(400).json({ status: false, message: "Invalid request" });
   }

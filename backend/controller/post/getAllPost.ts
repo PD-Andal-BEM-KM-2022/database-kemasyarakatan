@@ -55,9 +55,7 @@ export default async (
     return res.status(200).json({ length: posts.length, posts });
   }
 
-  if (limit > posts.length)
-    return res.status(200).json({ length: posts.length, posts });
-  else if (limit > 0 && limit < posts.length)
+  if (limit > 0)
     return res.status(200).json({
       lenght: limit,
       maxPage,
