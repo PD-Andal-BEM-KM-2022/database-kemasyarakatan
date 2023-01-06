@@ -19,9 +19,7 @@ export default async (
     return res.status(404).json({ message: "Post not found" });
   }
 
-  console.log(post);
-
-  if (true) {
+  if (post) {
     // Update category collection
     const category = await categoryCollection.findOne({
       name: post.category,
@@ -39,12 +37,10 @@ export default async (
       category.count = category.count - 1;
       // filter out the post from the category
 
-      console.log(category.posts[0]);
-      console.log(new ObjectId(postId));
-      console.log(category.posts[0] === new ObjectId(postId));
       category.posts = category.posts.filter(
         (post: ObjectId) => post.toString() !== postId
       );
+
       await categoryCollection.updateOne(
         { name: post.category },
         { $set: category }
@@ -54,7 +50,7 @@ export default async (
         .status(200)
         .json({ deletedId: postId, message: "Post deleted successfully" });
     }
+  } else {
+    return res.status(500).json({ message: "Something went wrong" });
   }
-
-  return res.status(500).json({ message: "Something went wrong" });
 };
