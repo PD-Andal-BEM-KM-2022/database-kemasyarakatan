@@ -1,5 +1,3 @@
-import { ObjectId } from "mongodb";
-
 export type post = {
   title: string;
   content: string[];
@@ -13,7 +11,7 @@ export type post = {
   };
   location: string;
   category: string;
-  comments: [commentType];
+  comments: [];
 };
 
 export type contact = {
@@ -34,7 +32,7 @@ export type commentType = {
 
 export type postReq = {
   title: string;
-  content: string;
+  content: string[];
   img: [string];
   contact: {
     name: string;
