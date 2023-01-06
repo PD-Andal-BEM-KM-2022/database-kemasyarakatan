@@ -13,12 +13,18 @@ export default function Community() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/post/get-post?id=63b5acf79fd650b5ff805a9f")
-      .then((res) => res.json())
-      .then((data) => {
+    fetch("/api/v2/post")
+      .then(res => res.json())
+      .then(data => {
         setData(data);
         setLoading(false);
         console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+        alert(
+          "Terjadi kesalahan pada fetch data post dengan id 63b2880d3f25858c5bc2452a"
+        );
       });
   }, []);
 
