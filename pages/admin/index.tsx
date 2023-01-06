@@ -258,7 +258,7 @@ export default function Admin(props: any) {
 												<textarea
 													id="content"
 													className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-													placeholder="Deskripsi"
+													placeholder="Deskripsi (paragraf terpisah dengan enter)"
 												/>
 											</p>
 										</div>
