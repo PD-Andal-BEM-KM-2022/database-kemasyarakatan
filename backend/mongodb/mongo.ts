@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import { MONGODB_URI } from "./constant";
+import { MONGODB_URI } from "../typescript/constant";
 
 const uri = MONGODB_URI;
 const options = {};

@@ -1,17 +1,17 @@
 export type post = {
-  _id: string;
   title: string;
-  content: string;
+  content: string[];
   img: [string];
   contact: contact;
   views: number;
   createdAt: string;
   updatedAt: string;
   metadata: {
-    tags: [string];
-    categories: [string];
+    tags: string[];
   };
-  comments: [commentType];
+  location: string;
+  category: string;
+  comments: [];
 };
 
 export type contact = {
@@ -24,7 +24,6 @@ export type contact = {
   line: string;
 };
 
-
 export type commentType = {
   _id: string;
   comment: string;
@@ -33,7 +32,7 @@ export type commentType = {
 
 export type postReq = {
   title: string;
-  content: string;
+  content: string[];
   img: [string];
   contact: {
     name: string;
@@ -44,8 +43,9 @@ export type postReq = {
     twitter: string;
     line: string;
   };
-  keywords: [string];
-  categories: [string];
+  location: string;
+  keywords: string[];
+  category: string;
 };
 
 export type postDeleteReq = {
@@ -67,9 +67,15 @@ export type postUpdateReq = {
     line: string;
   };
   keywords: [string];
-  categories: [string];
+  category: [string];
 };
 
 export type postUpdateViewsReq = {
   id: string;
+};
+
+export type categoryType = {
+  _id: string;
+  name: string;
+  countObject: number;
 };

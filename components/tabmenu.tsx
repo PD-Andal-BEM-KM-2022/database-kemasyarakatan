@@ -8,33 +8,32 @@ export default function Tabmenu() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch("/api/post/get-posts")
+		fetch("/api/v2/post")
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(data);
 				setdata(data.posts);
 				setLoading(false);
 			});
 	}, []);
 
-	// console.log(`data adalah ${data}`);
+	console.log(data);
 
 	if (isLoading) return <p>Loading...</p>;
 	if (!data) return <p>No profile data</p>;
+
+	console.log(data);
 
 	return (
 		<div className="mx-auto w-[90%]">
 			<Tabs.Group aria-label="Tabs with underline" style="underline">
 				<Tabs.Item active={true} title="Semua">
 					<div className="w-[95%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-						{data.map((item) => (
-							<Card	
-								Image={item.img}
-								Title={item.title}
-								Desc={item.content}
-							/>
-						))}
-
+						{data &&
+							data?.map((item) => {
+								return (
+									<Card Image={item.img} Title={item.title} Desc={item.desc} />
+								);
+							})}
 					</div>
 				</Tabs.Item>
 				<Tabs.Item title="Kemanusiaan">
