@@ -40,6 +40,7 @@ export default async (
       category.posts = category.posts.filter(
         (post: ObjectId) => post.toString() !== postId
       );
+
       await categoryCollection.updateOne(
         { name: post.category },
         { $set: category }
@@ -49,7 +50,7 @@ export default async (
         .status(200)
         .json({ deletedId: postId, message: "Post deleted successfully" });
     }
+  } else {
+    return res.status(500).json({ message: "Something went wrong" });
   }
-
-  return res.status(500).json({ message: "Something went wrong" });
 };
