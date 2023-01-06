@@ -13,7 +13,7 @@ export default function Community() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/v2/post")
+    fetch("/api/v2/post?id=63b777237162b243ce07d41e")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -151,10 +151,10 @@ export default function Community() {
               <div className="flex gap-3 font-bold items-center justify-center">
                 <svg
                   width="20"
-                  height=""
-                  viewBox="0 0 20 20"
+                  height="20"
+                  viewBox="2 2 20 20"
                   fill="none"
-                  className="lg:w-6 lg:h-8"
+                  className="lg:w-6 lg:h-6"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -168,12 +168,13 @@ export default function Community() {
             {/*Instagram */}
             {data.contact.instagram ? (
               <div className="flex gap-3 font-bold items-center justify-center">
-                <div className="flex items-center justify-center">
+                
                   <svg
-                    width="22"
-                    height="22"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
                     fill="none"
-                    className="lg:w-8 lg:h-8"
+                    className="lg:w-6 lg:h-6"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
@@ -181,7 +182,6 @@ export default function Community() {
                       fill="black"
                     />
                   </svg>
-                </div>
                 <a href={data.contact.instagram} className="lg:text-xl">
                   {username}
                 </a>
@@ -191,9 +191,9 @@ export default function Community() {
             {data.contact.twitter ? (
               <div className="flex gap-3 font-bold items-center justify-center">
                 <svg
-                  width="21"
-                  height="17"
-                  viewBox="0 0 21 17"
+                  width="20"
+                  height="20"
+                  viewBox="1 1 20 20"
                   fill="none"
                   className="lg:w-6 lg:h-6"
                   xmlns="http://www.w3.org/2000/svg"
