@@ -9,14 +9,8 @@ export default function Admin(props: any) {
 	const [data, setData] = useState(null);
 	const { status } = useSession();
 
-	// Form data
-	const [title, setTitle] = useState("");
-	const [date, setDate] = useState("");
-	const [category, setCategory] = useState("");
-	const [content, setContent] = useState("");
-
 	useEffect(() => {
-		fetch("/api/post/get-posts")
+		fetch("/api/v2/post")
 			.then((res) => res.json())
 			.then((data) => {
 				setData(data);
@@ -32,30 +26,54 @@ export default function Admin(props: any) {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
+		// Separate paragraphs
+		const contents = e.target.content.value
+			.split("\n")
+			.filter((item) => item !== "");
+
+		// Separate keywords
+		const keywords = e.target.keywords.value
+			.split(",")
+			.filter((item) => item !== "")
+			.map((item) => item.trim());
+
+		// Filter null contacts
+		const contacts = {
+			name: e.target.name.value,
+			email: e.target.email.value,
+			phone: e.target.phone.value,
+			facebook: e.target.facebook.value,
+			instagram: e.target.instagram.value,
+			twitter: e.target.twitter.value,
+		};
+		for (const [key, value] of Object.entries(contacts)) {
+			if (value === "") {
+				delete contacts[key];
+			}
+		}
+
 		// Form data
 		const data = {
-			title: title,
-			date: date,
-			category: category,
-			content: content,
+			title: e.target.title.value,
+			content: contents,
+			location: e.target.location.value,
+			image: e.target.image.value,
+			contact: contacts,
+			keywords: keywords,
+			category: e.target.category.value,
 		};
 		console.log(data);
 
-		// TODO: Adjust this to work with the new API
-		// const res = await fetch("/api/post/create-post", {
-		//   method: "POST",
-		//   body: JSON.stringify({
-		//     title: e.target.title.value,
-		//     content: e.target.content.value,
-		//     img: e.target.img.value,
-		//     community: e.target.community.value,
-		//   }),
-		//   headers: {
-		//     "Content-Type": "application/json",
-		//   },
-		// });
-		// const result = await res.json();
-		// console.log(result);
+		// Send data to API
+		const res = await fetch("/api/v2/post", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		});
+		const json = await res.json();
+		console.log(json);
 
 		setIsOpen("hidden");
 		resetForm(e);
@@ -130,54 +148,134 @@ export default function Admin(props: any) {
 										Add Post
 									</h3>
 									<form id="addPost" onSubmit={handleSubmit}>
+										{/* Title */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<input
 													type="text"
 													id="title"
-													onChange={(e) => {
-														setTitle(e.target.value);
-													}}
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Judul Post"
 												/>
 											</p>
 										</div>
-										<div className="mt-2">
-											<p className="text-sm text-gray-500">
-												<input
-													type="text"
-													id="date"
-													onChange={(e) => {
-														setDate(e.target.value);
-													}}
-													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-													placeholder="Date"
-												/>
-											</p>
-										</div>
+										{/* Category */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<input
 													type="text"
 													id="category"
-													onChange={(e) => {
-														setCategory(e.target.value);
-													}}
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Kategori"
 												/>
 											</p>
 										</div>
+										{/* Location */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="location"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Lokasi"
+												/>
+											</p>
+										</div>
+										{/* Contacts - Name */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="name"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Nama Kontak"
+												/>
+											</p>
+										</div>
+										{/* Phone */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="number"
+													id="phone"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Nomor"
+												/>
+											</p>
+										</div>
+										{/* Email */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="email"
+													id="email"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Email"
+												/>
+											</p>
+										</div>
+										{/* Facebook */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="facebook"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Facebook"
+												/>
+											</p>
+										</div>
+										{/* Instagram */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="instagram"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Instagram"
+												/>
+											</p>
+										</div>
+										{/* Twitter */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="twitter"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Twitter"
+												/>
+											</p>
+										</div>
+										{/* Content */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<textarea
 													id="content"
-													onChange={(e) => {
-														setContent(e.target.value);
-													}}
 													className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Deskripsi"
+												/>
+											</p>
+										</div>
+										{/* Keywords */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="keywords"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Keywords (pisahkan dengan koma)"
+												/>
+											</p>
+										</div>
+										{/* Image */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="file"
+													id="image"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder="Image"
 												/>
 											</p>
 										</div>
