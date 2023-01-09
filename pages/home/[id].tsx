@@ -8,43 +8,83 @@ export default function Community() {
   const router = useRouter();
   const { id } = router.query;
 
+
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [comment , setComment] = useState([]);
+  const [inputComment, setInputComment] = useState("");
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/v2/post?id=63b777237162b243ce07d41e")
+    fetch(`/api/v2/post?id=${id}`)
       .then(res => res.json())
       .then(data => {
         setData(data);
         setLoading(false);
-        console.log(data);
+        // console.log(data);
       })
       .catch(err => {
         console.log(err);
         alert(
-          "Terjadi kesalahan pada fetch data post dengan id 63b2880d3f25858c5bc2452a"
+          `Terjadi kesalahan pada fetch data post dengan id ${id}`
+        );
+      });
+
+      fetch(`/api/v2/comment?postId=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        // setData(data);
+        setComment(data.comment);
+        // console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+        alert(
+          `Terjadi kesalahan pada fetch data post dengan id ${id}`
         );
       });
   }, []);
 
+  let commentDate = []
+  comment?.forEach((item) => {
+    let temp = item.createdAt.split("T");
+    commentDate.push(temp[0]);
+  })
+
+
   if (isLoading) return <p>Loading...</p>;
   if (!data) return <p>No profile data</p>;
 
-  let instagram = data.contact.instagram;
-  let parts = instagram.split("https://instagram.com/");
+  let instagram = data.contact?.instagram;
+  let parts = instagram?.split("https://instagram.com/");
   let username = parts[1];
 
-  const comment = Object.values(data.comments);
+  // const comment = Object.values(data.comments);
+
+  function submitComment(e){
+    e.preventDefault();
+    fetch(`/api/v2/comment`, {
+      method: "POST",
+      body: JSON.stringify({
+        postId: id,
+        comment: inputComment,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    alert("Komentar berhasil ditambahkan");
+    
+  }
 
   return (
     <div className="px-12 py-10 lg:my-24 lg:mx-36">
       {/* Community Title */}
       <div className="flex gap-5 items-center">
         <Link
-          href="/community/[id]"
+          href="/"
           className="w-3 h-10 flex lg:w-8"
-          as={`/community/${data.id}`}
         >
           <svg
             viewBox="0 0 14 24"
@@ -227,8 +267,19 @@ export default function Community() {
       <div className="flex-grow mt-10 mb-5 border-t border-gray-400"></div>
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold">Comments</h1>
-        <input></input>
-        <p>komen 1</p>
+        <form onSubmit={submitComment} className="flex flex-row my-4">
+          <input type="text" className="w-full py-5" onChange={(e) => setInputComment(e.target.value)} placeholder="Masukkan Comment" />
+          <button type="submit" className="realtive bg-black text-white p-5 mx-2">Submit</button>
+        </form>
+        {comment?.map((comment, index) => (
+          <div key={index} className="flex flex-col my-2">
+              <div className="flex flex-col">
+                <h3 className="font-bold text-xl">{commentDate[index]}</h3>
+                <p className="text-lg">{comment.comment}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   );
