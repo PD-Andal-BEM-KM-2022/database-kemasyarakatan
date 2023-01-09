@@ -2,48 +2,59 @@ import { BsTagFill } from "react-icons/bs";
 import { BsCalendarFill } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { HiTrash } from "react-icons/hi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AdminCard(props) {
 	const [isOpen, setIsOpen] = useState("hidden");
 	const [isHoverA, setIsHoverA] = useState("black");
 	const [isHoverB, setIsHoverB] = useState("black");
 
-	// Form data
-	const [title, setTitle] = useState("");
-	const [date, setDate] = useState("");
-	const [category, setCategory] = useState("");
-	const [content, setContent] = useState("");
+	useEffect(() => {
+		console.log(props.Desc);
+	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(e);
+
+		// Separate paragraphs
+		const contents = e.target.content.value
+			.split("\n")
+			.filter((item) => item !== "");
+
+		// Filter null contacts
+		const contacts = {
+			name: e.target.name.value,
+			email: e.target.email.value,
+			phone: e.target.phone.value,
+			facebook: e.target.facebook.value,
+			instagram: e.target.instagram.value,
+			twitter: e.target.twitter.value,
+		};
+		for (const [key, value] of Object.entries(contacts)) {
+			if (value === "") {
+				delete contacts[key];
+			}
+		}
 
 		// Form data
 		const data = {
-			title: title,
-			date: date,
-			category: category,
-			content: content,
+			id: props.ID,
+			title: e.target.title.value,
+			content: contents,
+			location: e.target.location.value,
+			contact: contacts,
 		};
 		console.log(data);
 
-		// TODO: Adjust this to work with the new API
-		// const res = await fetch("/api/post/update-post", {
-		//   method: "POST",
-		//   body: JSON.stringify({
-		//     id: props.ID,
-		//     title: e.target.title.value,
-		//     content: e.target.content.value,
-		//     img: e.target.img.value,
-		//     community: e.target.community.value,
-		//   }),
-		//   headers: {
-		//     "Content-Type": "application/json",
-		//   },
-		// });
-		// const result = await res.json();
-		// console.log(result);
+		const res = await fetch("/api/v2/post", {
+			method: "PATCH",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const result = await res.json();
+		console.log(result);
 
 		setIsOpen("hidden");
 		resetForm(e);
@@ -51,11 +62,6 @@ export default function AdminCard(props) {
 
 	// Reset the form
 	const resetForm = (e) => {
-		setTitle("");
-		setDate("");
-		setCategory("");
-		setContent("");
-
 		e.target.reset();
 		window.location.reload();
 	};
@@ -166,47 +172,134 @@ export default function AdminCard(props) {
 									>
 										Edit Post
 									</h3>
-									<form id="editPost" onSubmit={handleSubmit}>
+									<form id={props.ID} onSubmit={handleSubmit}>
+										{/* Title */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<input
 													type="text"
 													id="title"
-													onChange={(e) => setTitle(e.target.value)}
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-													placeholder={props.Title}
+													placeholder={
+														props.Title !== "" ? props.Title : "Judul Postingan"
+													}
 												/>
 											</p>
 										</div>
+										{/* Location */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<input
 													type="text"
-													id="date"
-													onChange={(e) => setDate(e.target.value)}
+													id="location"
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-													placeholder={props.Date}
+													placeholder={
+														props.Location !== "" ? props.Location : "Lokasi"
+													}
 												/>
 											</p>
 										</div>
+										{/* Contacts - Name */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<input
 													type="text"
-													id="category"
-													onChange={(e) => setCategory(e.target.value)}
+													id="name"
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-													placeholder={props.Category}
+													placeholder={
+														props.Contact.name !== null
+															? props.Contact.name
+															: "Nama"
+													}
 												/>
 											</p>
 										</div>
+										{/* Phone */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="number"
+													id="phone"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder={
+														props.Contact.phone !== null
+															? props.Contact.phone
+															: "No. HP"
+													}
+												/>
+											</p>
+										</div>
+										{/* Email */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="email"
+													id="email"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder={
+														props.Contact.email !== null
+															? props.Contact.email
+															: "Email"
+													}
+												/>
+											</p>
+										</div>
+										{/* Facebook */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="facebook"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder={
+														props.Contact.facebook !== null
+															? props.Contact.facebook
+															: "Facebook"
+													}
+												/>
+											</p>
+										</div>
+										{/* Instagram */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="instagram"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder={
+														props.Contact.instagram !== null
+															? props.Contact.instagram
+															: "Instagram"
+													}
+												/>
+											</p>
+										</div>
+										{/* Twitter */}
+										<div className="mt-2">
+											<p className="text-sm text-gray-500">
+												<input
+													type="text"
+													id="twitter"
+													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+													placeholder={
+														props.Contact.twitter !== null
+															? props.Contact.twitter
+															: "Twitter"
+													}
+												/>
+											</p>
+										</div>
+										{/* Content */}
 										<div className="mt-2">
 											<p className="text-sm text-gray-500">
 												<textarea
 													id="content"
-													onChange={(e) => setContent(e.target.value)}
 													className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-													placeholder={props.Desc}
+													placeholder={
+														props.Desc !== null
+															? props.Desc.join("\n\n")
+															: "Deskripsi (paragraf terpisah dengan enter)"
+													}
 												/>
 											</p>
 										</div>
@@ -217,7 +310,7 @@ export default function AdminCard(props) {
 						<div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
 							<button
 								type="submit"
-								form="editPost"
+								form={props.ID}
 								className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
 							>
 								Edit

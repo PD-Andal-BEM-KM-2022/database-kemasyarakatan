@@ -113,7 +113,7 @@ export default function Admin(props: any) {
 								<AdminCard
 									Image={item.img}
 									Title={item.title}
-									Desc={item.content[0]}
+									Desc={item.content}
 									Category={item.category}
 									Date={splitDate(item.updatedAt)}
 									Keywords={item.keywords}
@@ -159,6 +159,7 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="title"
+													required
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Judul Post"
 												/>
@@ -170,6 +171,7 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="category"
+													required
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Kategori"
 												/>
@@ -181,6 +183,7 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="location"
+													required
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Lokasi"
 												/>
@@ -192,6 +195,7 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="name"
+													required
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Nama Kontak"
 												/>
@@ -257,6 +261,7 @@ export default function Admin(props: any) {
 											<p className="text-sm text-gray-500">
 												<textarea
 													id="content"
+													required
 													className="w-full h-[200px] px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Deskripsi (paragraf terpisah dengan enter)"
 												/>
@@ -268,6 +273,7 @@ export default function Admin(props: any) {
 												<input
 													type="text"
 													id="keywords"
+													required
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Keywords (pisahkan dengan koma)"
 												/>
@@ -279,6 +285,7 @@ export default function Admin(props: any) {
 												<input
 													type="file"
 													id="image"
+													required
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder="Image"
 												/>
