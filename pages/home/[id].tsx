@@ -1,41 +1,39 @@
 import Link from "next/link";
-import Head from "next/head"
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 export const getStaticPaths = async () => {
-
-  const res = await fetch("http://localhost:3000/api/v2/post")
+  const res = await fetch("http://localhost:3000/api/v2/post");
   const data = await res.json();
-  
 
   // map data to an array of path objects with params (id)
-  const paths = data.posts.map(item => {
+  const paths = data.posts.map((item) => {
     return {
-      params: { id: item.id.toString() }
-    }
-  })
+      params: { id: item.id.toString() },
+    };
+  });
 
   return {
     paths,
-    fallback: false
-  }
-}
+    fallback: false,
+  };
+};
 
 export const getStaticProps = async (context) => {
   const id = context.params.id;
-  const res = await fetch("http://localhost:3000/api/v2/post?id=" + id );
+  const res = await fetch("http://localhost:3000/api/v2/post?id=" + id);
   const data = await res.json();
 
   return {
     props: { ninja: data, id: id },
-  }
-}
+  };
+};
 
 export default function Community({ ninja, id }) {
   const [inputComment, setInputComment] = useState("");
-  const [comment  , setComment] = useState([]);
+  const [comment, setComment] = useState([]);
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
@@ -54,30 +52,27 @@ export default function Community({ ninja, id }) {
     //     );
     //   });
 
-      fetch(`/api/v2/comment?postId=${id}`)
-      .then(res => res.json())
-      .then(data => {
+    fetch(`/api/v2/comment?postId=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
         // setData(data);
         setComment(data.comment.reverse());
         // console.log(data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-        alert(
-          `Terjadi kesalahan pada fetch data post dengan id ${id}`
-        );
+        alert(`Terjadi kesalahan pada fetch data post dengan id ${id}`);
       });
-  }, [ submit]);
+  }, [submit]);
 
-  let commentDate = []
-  let commentTime = []
+  let commentDate = [];
+  let commentTime = [];
   comment?.forEach((item) => {
     let temp = item.createdAt.split("T");
     commentDate.push(temp[0]);
-    let temp2 = temp[1].split(".")
+    let temp2 = temp[1].split(".");
     commentTime.push(temp2[0]);
-  })
-
+  });
 
   // if (isLoading) return <p>Loading...</p>;
   // if (!ninja) return <p>No profile data</p>;
@@ -88,7 +83,7 @@ export default function Community({ ninja, id }) {
 
   // const comment = Object.values(data.comments);
 
-  function submitComment(e){
+  function submitComment(e) {
     e.preventDefault();
     setInputComment("");
     fetch(`/api/v2/comment`, {
@@ -100,27 +95,23 @@ export default function Community({ ninja, id }) {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-    
+    });
+
     alert("Komentar berhasil ditambahkan");
     setSubmit(!submit);
     // window.location.reload();
-    
   }
 
-  if(!ninja) return <p>Loading...</p>
+  if (!ninja) return <p>Loading...</p>;
   return (
     <>
       <Head>
-          <title>{ninja.title}</title>
-        </Head>
+        <title>{ninja.title}</title>
+      </Head>
       <div className="px-12 py-10 lg:my-24 lg:mx-36">
         {/* Community Title */}
         <div className="flex gap-5 items-center">
-          <Link
-            href="/"
-            className="w-3 h-10 flex lg:w-8"
-          >
+          <Link href="/" className="w-3 h-10 flex lg:w-8">
             <svg
               viewBox="0 0 14 24"
               fill="none"
@@ -243,20 +234,19 @@ export default function Community({ ninja, id }) {
               {/*Instagram */}
               {ninja.contact.instagram ? (
                 <div className="flex gap-3 font-bold items-center justify-center">
-                  
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      className="lg:w-6 lg:h-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"
-                        fill="black"
-                      />
-                    </svg>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="lg:w-6 lg:h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"
+                      fill="black"
+                    />
+                  </svg>
                   <a href={ninja.contact.instagram} className="lg:text-xl">
                     {username}
                   </a>
@@ -303,18 +293,33 @@ export default function Community({ ninja, id }) {
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold">Comments</h1>
           <form onSubmit={submitComment} className="flex flex-row my-4">
-            <input type="text" className="w-full py-5" value={inputComment} onChange={(e) => setInputComment(e.target.value)} placeholder="Masukkan Comment" />
-            <button type="submit" className="relative bg-black text-white p-5 mx-2 hover:text-black hover:bg-[red]">Submit</button>
+            <input
+              type="text"
+              className="w-full py-5 rounded-lg"
+              value={inputComment}
+              onChange={(e) => setInputComment(e.target.value)}
+              placeholder="Masukkan Comment"
+            />
+            <button
+              type="submit"
+              className="relative bg-black text-white p-5 mx-2 rounded-lg hover:text-black hover:bg-[red]"
+            >
+              Comment
+            </button>
           </form>
           {comment?.map((comment, index) => (
             <div key={index} className="flex flex-col my-2">
-                <div className="flex flex-col">
-                  <h3 className="font-bold text-xl">{commentDate[index]}  -  {commentTime[index]}</h3>
-                  <p className="text-lg">{comment.comment}</p>
+              <div className="flex flex-col">
+                <div className="flex flex-row gap-2">
+                  <h3 className="font-bold text-xl">{commentDate[index]}</h3>
+                  <h3 className="text-xl"> - </h3>
+                  <h3 className="text-gray text-xl"> {commentTime[index]}</h3>
                 </div>
+                <p className="text-lg">{comment.comment}</p>
               </div>
-            ))
-          }
+              <div className="flex-grow mt-3 mb-3 border-t border-gray-400"></div>
+            </div>
+          ))}
         </div>
       </div>
     </>
