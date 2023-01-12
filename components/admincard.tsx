@@ -2,7 +2,12 @@ import { BsTagFill } from "react-icons/bs";
 import { BsCalendarFill } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { HiTrash } from "react-icons/hi";
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
+=======
+import { useState } from "react";
+import Image from "next/image";
+>>>>>>> 46d8898 (minor)
 
 export default function AdminCard(props) {
 	const [isOpen, setIsOpen] = useState("hidden");
@@ -13,8 +18,10 @@ export default function AdminCard(props) {
 		console.log(props.Desc);
 	}, []);
 
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+<<<<<<< HEAD
 
 		// Separate paragraphs
 		const contents = e.target.content.value
@@ -45,6 +52,18 @@ export default function AdminCard(props) {
 			contact: contacts,
 		};
 		console.log(data);
+=======
+		const data = {
+			title,
+			date,
+			category,
+			content,
+			id: props.ID
+		}
+		console.log('inner', data);
+		// Form data
+		
+>>>>>>> 46d8898 (minor)
 
 		const res = await fetch("/api/v2/post", {
 			method: "PATCH",
@@ -57,7 +76,7 @@ export default function AdminCard(props) {
 		console.log(result);
 
 		setIsOpen("hidden");
-		resetForm(e);
+		// resetForm(e);
 	};
 
 	// Reset the form
@@ -90,10 +109,12 @@ export default function AdminCard(props) {
 		<>
 			<div className=" bg-white rounded-lg shadow-md w-96 h-4/12 dark:bg-gray-800 dark:border-gray-700 transition-all hover:shadow-[1px_8px_20px_grey] shrink">
 				<div className="w-full h-[125px]">
-					<img
+					<Image
 						className="rounded-t-lg object-cover w-full h-[125px]"
 						src={props.Image}
 						alt={props.Title}
+						width={500}
+						height={500}
 					/>
 				</div>
 				<div className="p-5">
@@ -179,6 +200,14 @@ export default function AdminCard(props) {
 												<input
 													type="text"
 													id="title"
+<<<<<<< HEAD
+=======
+													value={title}
+													onChange={(e) => {
+														console.log(e.target.value);
+														setTitle(e.target.value);
+													}}
+>>>>>>> 46d8898 (minor)
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder={
 														props.Title !== "" ? props.Title : "Judul Postingan"
