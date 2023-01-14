@@ -2,12 +2,8 @@ import { BsTagFill } from "react-icons/bs";
 import { BsCalendarFill } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { HiTrash } from "react-icons/hi";
-<<<<<<< HEAD
 import { useState, useEffect } from "react";
-=======
-import { useState } from "react";
 import Image from "next/image";
->>>>>>> 46d8898 (minor)
 
 export default function AdminCard(props) {
 	const [isOpen, setIsOpen] = useState("hidden");
@@ -21,7 +17,6 @@ export default function AdminCard(props) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-<<<<<<< HEAD
 
 		// Separate paragraphs
 		const contents = e.target.content.value
@@ -52,18 +47,6 @@ export default function AdminCard(props) {
 			contact: contacts,
 		};
 		console.log(data);
-=======
-		const data = {
-			title,
-			date,
-			category,
-			content,
-			id: props.ID
-		}
-		console.log('inner', data);
-		// Form data
-		
->>>>>>> 46d8898 (minor)
 
 		const res = await fetch("/api/v2/post", {
 			method: "PATCH",
@@ -200,14 +183,6 @@ export default function AdminCard(props) {
 												<input
 													type="text"
 													id="title"
-<<<<<<< HEAD
-=======
-													value={title}
-													onChange={(e) => {
-														console.log(e.target.value);
-														setTitle(e.target.value);
-													}}
->>>>>>> 46d8898 (minor)
 													className="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
 													placeholder={
 														props.Title !== "" ? props.Title : "Judul Postingan"
