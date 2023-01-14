@@ -17,8 +17,8 @@ export default function Sidebar() {
 					<RiPencilFill className="w-5 h-5" />
 					<h3>Post</h3>
 				</div>
-				<div className="flex mt-10 text-center font-semibold bg-gray-200 rounded-lg px-2 py-1 gap-3 w-3/4">
-					<RiLogoutBoxFill className="w-5 h-5" />
+				<div className="flex items-center mt-10 text-center font-semibold bg-gray-200 rounded-lg px-2 py-1 gap-3 w-3/4">
+					<RiLogoutBoxFill className="w-12 h-5" />
 					<Link href="/auth/login" onClick={logoutHandler}>
 						Logout
 					</Link>

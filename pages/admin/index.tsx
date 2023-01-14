@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 export default function Admin(props: any) {
   const [isOpen, setIsOpen] = useState("hidden");
   const [data, setData] = useState(null);
+  const [updateData, setUpdateData] = useState(null);
   const { status } = useSession();
 
   useEffect(() => {
@@ -14,9 +15,8 @@ export default function Admin(props: any) {
       .then(res => res.json())
       .then(data => {
         setData(data);
-        console.log(data);
       });
-  }, []);
+  }, [updateData]);
 
   const splitDate = (date: string) => {
     const split = date.split("T");
@@ -62,7 +62,6 @@ export default function Admin(props: any) {
       keywords: keywords,
       category: e.target.category.value,
     };
-    console.log(data);
 
     // Send data to API
     const res = await fetch("/api/v2/post", {
@@ -73,7 +72,6 @@ export default function Admin(props: any) {
       body: JSON.stringify(data),
     });
     const json = await res.json();
-    console.log(json);
 
     setIsOpen("hidden");
     resetForm(e);
@@ -88,6 +86,9 @@ export default function Admin(props: any) {
     return <p>Loading...</p>;
   }
 
+  if (!data) {
+    return <p>Loading...</p>;
+  }
   return (
     <div>
       <div className='w-full h-[100vh] overflow-y-hidden flex flex-row'>
@@ -110,9 +111,12 @@ export default function Admin(props: any) {
           <div className='w-full flex flex-wrap gap-10'>
             {data &&
               data.posts.map((item: any) => {
-				return (
+                return (
                   <AdminCard
-					key={item.id}
+                    key={item.id}
+                    onChange={() => {
+                      setUpdateData(val => !val);
+                    }}
                     Image={item.img}
                     Title={item.title}
                     Desc={item.content[0]}
@@ -164,6 +168,7 @@ export default function Admin(props: any) {
                           id='title'
                           className='w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline'
                           placeholder='Judul Post'
+                          required
                         />
                       </p>
                     </div>
@@ -175,6 +180,7 @@ export default function Admin(props: any) {
                           id='category'
                           className='w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline'
                           placeholder='Kategori'
+                          required
                         />
                       </p>
                     </div>
