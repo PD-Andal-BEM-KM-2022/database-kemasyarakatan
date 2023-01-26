@@ -10,7 +10,7 @@ export default function Search() {
       return setRecommandations([]);
     }
 
-    const result = await fetch(`/api/search?search=${e.target.value}`);
+    const result = await fetch(`/api/v1/search?search=${e.target.value}`);
 
     if (result.ok) {
       const data = await result.json();

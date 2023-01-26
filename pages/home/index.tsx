@@ -9,9 +9,7 @@ export default function index() {
 			<Navbar />
 			<div className="lg:m-[100px_80px_20px_80px] md:m-[100px_40px_20px_40px] m-[70px_40px_30px_40px]">
 				<h1 className="mb-6 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl md:text-left text-center">
-					<span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
 						Database
-					</span>{" "}
 					Kemasyarakatan
 				</h1>
 				<form>
