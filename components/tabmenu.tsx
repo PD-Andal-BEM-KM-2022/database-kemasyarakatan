@@ -16,12 +16,12 @@ export default function Tabmenu() {
 			});
 	}, []);
 
-	console.log(data);
+	// console.log(data);
 
 	if (isLoading) return <p>Loading...</p>;
 	if (!data) return <p>No profile data</p>;
 
-	console.log(data);
+	// console.log(data);
 
 	return (
 		<div className="mx-auto w-[90%]">
@@ -31,7 +31,7 @@ export default function Tabmenu() {
 						{data &&
 							data?.map((item) => {
 								return (
-									<Card Image={item.img} Title={item.title} Desc={item.desc} />
+									<Card Image={item.img} Title={item.title} Desc={item.content} ID={item.id} />
 								);
 							})}
 					</div>
