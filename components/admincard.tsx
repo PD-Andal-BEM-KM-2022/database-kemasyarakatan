@@ -44,6 +44,7 @@ export default function AdminCard(props) {
 		};
 		console.log(data);
 
+	
 		const res = await fetch("/api/v2/post", {
 			method: "PATCH",
 			body: JSON.stringify(data),

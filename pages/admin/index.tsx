@@ -8,6 +8,7 @@ export default function Admin(props: any) {
   const [isOpen, setIsOpen] = useState("hidden");
   const [data, setData] = useState(null);
   const [updateData, setUpdateData] = useState(null);
+  const [img, setImg] = useState(null);
   const { status } = useSession();
 
   useEffect(() => {
@@ -23,8 +24,25 @@ export default function Admin(props: any) {
     return split[0];
   };
 
+  const handleFileChanges = (e) => {
+    setImg(e.target.files[0]);
+  }
+
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    
+    
+    const formData = new FormData();
+    formData.append("image",img);
+
+    const imgResponse = await fetch(`https://api.imgbb.com/1/upload?key=0a99d26d9d8d7de020e0c5f23a80a05d`, {
+      method: "POST",
+      body: formData
+    });
+    const jsonImg = await imgResponse.json();
+
+    const imgUrl = [jsonImg.data.display_url];
 
     // Separate paragraphs
     const contents = e.target.content.value
@@ -57,11 +75,12 @@ export default function Admin(props: any) {
       title: e.target.title.value,
       content: contents,
       location: e.target.location.value,
-      image: e.target.image.value,
+      img: imgUrl,
       contact: contacts,
       keywords: keywords,
       category: e.target.category.value,
     };
+
 
     // Send data to API
     const res = await fetch("/api/v2/post", {
@@ -290,6 +309,7 @@ export default function Admin(props: any) {
                           id='image'
                           className='w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline'
                           placeholder='Image'
+                          onChange={handleFileChanges}
                         />
                       </p>
                     </div>
